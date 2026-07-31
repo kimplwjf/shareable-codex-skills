@@ -1,0 +1,12 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+output/
+logs/
+.wechat_preview/
+*.draft.json
+*.token
+__pycache__/
+*.py[cod]
+private/

@@ -1,0 +1,4 @@
+interface:
+  display_name: "PPTX 制作总控"
+  short_description: "规划可编辑 PPTX 的制作路线、材料准备与交付验证门禁流程"
+  default_prompt: "Use $pptx-production-suite to plan and produce a verified editable PPTX."

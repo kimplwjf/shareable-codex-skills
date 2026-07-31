@@ -1,0 +1,4 @@
+interface:
+  display_name: "短信发送前审核"
+  short_description: "检查中文短信的事实、变量、隐私与发送前风险并给出明确结论"
+  default_prompt: "Use $sms-template-review to review this SMS before it is sent."

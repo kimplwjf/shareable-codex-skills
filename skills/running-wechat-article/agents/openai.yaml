@@ -1,0 +1,4 @@
+interface:
+  display_name: "跑步公众号成稿"
+  short_description: "核验跑步赛事与训练信息并生成适合公众号发布的文章双文件包"
+  default_prompt: "Use $running-wechat-article to research and draft a running article for my WeChat account."
