@@ -93,11 +93,8 @@ def delimiter_issues(text: str) -> tuple[dict[str, str], ...]:
 
 
 def redact_url(url: str) -> str:
-    try:
-        parsed = urlsplit(url)
-        return f"{parsed.scheme or 'url'}://{parsed.hostname or '无有效域名'}/…"
-    except ValueError:
-        return "无效链接"
+    """Keep link diagnostics useful without exposing a domain or path."""
+    return "链接地址"
 
 
 def safe_urlsplit(url: str):

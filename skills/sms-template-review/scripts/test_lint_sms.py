@@ -93,6 +93,23 @@ class SmsLintTests(unittest.TestCase):
         self.assertNotIn("13800138000", rendered)
         self.assertIn("未替换变量", rendered)
 
+    def test_stdin_url_diagnostics_redact_all_url_components(self):
+        samples = (
+            ("malformed-url", "https://127.0.0.1/private-path?token=malformed", "127.0.0.1"),
+            ("bare-domain-url", "internal.example.com/private-path?token=bare", "internal.example.com"),
+            ("insecure-url", "http://public.example.com/private-path?token=insecure", "public.example.com"),
+        )
+        for expected_rule, url, hostname in samples:
+            with self.subTest(expected_rule=expected_rule):
+                result = run_lint(f"【示例赛事】详情请点击{url}。", use_stdin=True)
+                rendered = json.dumps(result["payload"], ensure_ascii=False)
+                rules = {item["rule"] for item in result["payload"]["issues"]}
+                self.assertIn(expected_rule, rules)
+                self.assertNotIn(url, rendered)
+                self.assertNotIn(hostname, rendered)
+                self.assertNotIn("private-path", rendered)
+                self.assertNotIn("token=", rendered)
+
     def test_internal_lint_matrix_covers_advisories(self):
         insecure = LINT_SMS.lint("请访问http://example.com/race")
         rules = {item["rule"] for item in insecure["issues"]}
@@ -104,7 +121,6 @@ class SmsLintTests(unittest.TestCase):
         self.assertFalse(LINT_SMS.valid_hostname("10.0.0.8"))
         self.assertFalse(LINT_SMS.valid_hostname("-bad.example.com"))
         self.assertTrue(LINT_SMS.valid_hostname("例子.测试"))
-        self.assertEqual(LINT_SMS.redact_url("not a url"), "url://无有效域名/…")
 
 
 if __name__ == "__main__":

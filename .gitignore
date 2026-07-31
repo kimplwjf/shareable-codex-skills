@@ -5,6 +5,7 @@
 output/
 logs/
 .wechat_preview/
+.wechat-article/
 *.draft.json
 *.token
 __pycache__/
