@@ -4,6 +4,7 @@
     "running-wechat-article": { "version": "0.1.0" },
     "wechat-article-flow": { "version": "0.1.0" },
     "sms-template-review": { "version": "0.1.1" },
-    "pptx-production-suite": { "version": "0.1.0" }
+    "pptx-production-suite": { "version": "0.1.0" },
+    "runhua": { "version": "0.1.0" }
   }
 }

@@ -2,7 +2,7 @@
 
 把内容生产中容易遗漏的事实、授权与交付检查，做成可公开安装的 Codex Skills。
 
-四个可独立安装的工作流，覆盖跑步内容写作、公众号本地预览与草稿上传、中文短信发送前审核，以及可编辑 PPTX 交付。账号、凭证、真实素材和私有配置始终留在安装者自己的工作区。
+五个可独立安装的工作流，覆盖跑步内容写作、公众号本地预览与草稿上传、中文短信发送前审核、可编辑 PPTX 交付，以及中文圆融协调口吻写作。账号、凭证、真实素材和私有配置始终留在安装者自己的工作区。
 
 ```bash
 npx skills add kimplwjf/shareable-codex-skills \
@@ -32,6 +32,33 @@ npx skills add kimplwjf/shareable-codex-skills \
 | 将已确认文章本地预览并上传草稿 | [`wechat-article-flow`](skills/wechat-article-flow/SKILL.md) | “用我的受信任适配器预览这篇 Markdown。” | `0.1.0` |
 | 判断一条短信是否可以发送 | [`sms-template-review`](skills/sms-template-review/SKILL.md) | “这条通知短信能发吗？请指出阻塞项并给出可用版本。” | `0.1.1` |
 | 制作或验收可编辑演示文稿 | [`pptx-production-suite`](skills/pptx-production-suite/SKILL.md) | “根据这份大纲制作可编辑 PPTX，并说明需要的工具和验收项。” | `0.1.0` |
+| 把话说得圆融顺口、便于协调 | [润滑 `runhua`](skills/runhua/SKILL.md) | “润滑一下：方案周五前给我，有困难及时说。” | `0.1.0` |
+
+### 润滑：把话说顺，把配合接起来
+
+适合群聊协调、提意见、催进度、谈合作和婉拒。默认带一点熟络的业务协调口吻：说清具体问题，接上共同推进的动作，再落到眼前的服务或配合上。内置融合自 ra-人话 的去 AI 味原则，避免模板对比、训话开头和空泛口号，同时保留期限、责任、拒绝和不确定性。
+
+**合成示例**
+
+原话：这个版本的报名入口不好找，需要调整。
+
+> 这个版本的报名入口还得再磨一下，现在找起来有点费劲。咱们把这段操作理顺，用户少找两遍，服务也就做到位了。
+
+安装「润滑」：
+
+```bash
+npx skills add kimplwjf/shareable-codex-skills \
+  --skill runhua \
+  --global --agent codex
+```
+
+安装后新开对话，例如：
+
+```text
+$runhua 润滑一下：方案周五前给我，有困难及时说。
+```
+
+想加强口吻可以说“再润一点”，需要收短可以说“保留这个味道，缩成两句”。默认直接输出中文成稿，无需额外安装 ra-人话，也不需要账号、API 或其他工具；写稿不会自动发送消息。
 
 ## 安装
 
@@ -49,7 +76,7 @@ npx skills add kimplwjf/shareable-codex-skills \
   --global --agent codex
 ```
 
-安装后新开一个 Codex 对话，直接使用 `$running-wechat-article`、`$wechat-article-flow`、`$sms-template-review` 或 `$pptx-production-suite`。
+安装后新开一个 Codex 对话，直接使用 `$running-wechat-article`、`$wechat-article-flow`、`$sms-template-review`、`$pptx-production-suite` 或 `$runhua`（润滑）。
 
 `skills` CLI 也支持 Claude Code、Cursor 等 Agent；将 `--agent codex` 替换为目标 Agent 即可。详见 [skills CLI](https://github.com/vercel-labs/skills)。
 

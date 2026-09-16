@@ -1,0 +1,4 @@
+interface:
+  display_name: "润滑"
+  short_description: "把中文消息润成圆融熟络的协调口吻，去掉 AI 味，保留事实与边界"
+  default_prompt: "请用 $runhua 把下面这段话润滑一下，去掉 AI 味和空话，保留原意和条件，直接给我中文成稿。"
