@@ -1,13 +1,35 @@
 # Shareable Codex Skills
 
-把内容生产中容易遗漏的事实、授权与交付检查，做成可公开安装的 Codex Skills。
+面向中文写作与内容交付的开源 Codex Skills：润滑口吻、跑步公众号写作、文章预览与草稿上传、短信审核、可编辑 PPTX 制作与验收。
 
 五个可独立安装的工作流，覆盖跑步内容写作、公众号本地预览与草稿上传、中文短信发送前审核、可编辑 PPTX 交付，以及中文圆融协调口吻写作。账号、凭证、真实素材和私有配置始终留在安装者自己的工作区。
 
+每个 skill 都有独立的使用说明和版本。安装会向 Agent 添加工作指引及附带资源；模型、账号、发布适配器与 PPTX 制作工具需要按场景另行准备。
+
+[快速安装](#快速安装) · [选择 Skill](#选择合适的-skill) · [使用与产物](#使用与产物) · [更新与卸载](#更新与卸载) · [常见问题](#常见问题)
+
+## 快速安装
+
+准备好 [Codex](https://developers.openai.com/codex/)、[Node.js LTS（含 npm / npx）](https://nodejs.org/)、Git，以及可访问 npm 和 GitHub 的网络。在终端执行以下命令。
+
+**只安装「润滑」：**
+
 ```bash
-npx skills add kimplwjf/shareable-codex-skills \
-  --skill '*' \
-  --global --agent codex
+npx --yes skills add kimplwjf/shareable-codex-skills --skill runhua --global --agent codex --yes
+```
+
+**安装全部五个 skill：**
+
+```bash
+npx --yes skills add kimplwjf/shareable-codex-skills --skill '*' --global --agent codex --yes
+```
+
+第一个 `--yes` 用于确认运行 npm 包，末尾的 `--yes` 跳过 skill 安装交互；希望逐项确认时可去掉这两个参数。安装前请阅读对应 `SKILL.md`，本地有自定义改动时先备份。
+
+安装完成后，新开 Codex 对话输入：
+
+```text
+$runhua 帮我润滑一下：方案周五前给我，有困难及时说。
 ```
 
 ## 效果预览
@@ -60,7 +82,29 @@ $runhua 润滑一下：方案周五前给我，有困难及时说。
 
 想加强口吻可以说“再润一点”，需要收短可以说“保留这个味道，缩成两句”。默认直接输出中文成稿，无需额外安装 ra-人话，也不需要账号、API 或其他工具；写稿不会自动发送消息。
 
-## 安装
+## 使用与产物
+
+| Skill | 提供什么 | 得到什么 | 运行前提与边界 |
+| --- | --- | --- | --- |
+| `runhua` | 原话、收件对象、希望保留的条件 | 圆融顺口的中文成稿，可调浓度和长度 | 无额外工具依赖；保留事实、期限与拒绝，不自动发消息 |
+| `running-wechat-article` | 选题、目标读者、权威来源与可用素材 | 内部选题稿和读者正文两份 Markdown | 时效事实需要检索核验；图片需要使用授权，默认只交付本地文件 |
+| `wechat-article-flow` | 已确认文章、私有账号配置、受信任适配器 | 本地预览；确认后可上传公众号草稿 | 不附带上传器或微信凭证；选择、预览、打开浏览器与上传分步确认 |
+| `sms-template-review` | 短信原文或截图、受众、发送时间、事实来源 | 审核结论、阻塞项、待核验项和可安全改写的版本 | 附带检查脚本需要 Python 3；格式检查不能证明业务事实正确 |
+| `pptx-production-suite` | 内容来源、现有 PPTX 或模板、交付要求 | 工具路线、制作与验收；依赖齐备时交付可编辑 PPTX | 需要作者工具及独立审查能力；原生动画需相应播放器验证 |
+
+以下请求使用合成场景和示例文件名，按自己的材料替换：
+
+```text
+$running-wechat-article 根据我提供的赛事官方公告，写一篇报名指南，分别输出选题与成稿、公众号正文。
+
+$wechat-article-flow 我有一篇 article.md，请先说明账号适配器需要哪些配置，配置确认后只做本地预览。
+
+$sms-template-review 审核这条模板：“您的报名已通过，请于{日期}前确认。” 缺少事实依据时请列出待核验项。
+
+$pptx-production-suite 根据 outline.md 制作一份可编辑演示文稿，先检查工具和素材是否齐备。
+```
+
+## 安装选项
 
 查看仓库中可安装的 skill：
 
@@ -80,6 +124,14 @@ npx skills add kimplwjf/shareable-codex-skills \
 
 `skills` CLI 也支持 Claude Code、Cursor 等 Agent；将 `--agent codex` 替换为目标 Agent 即可。详见 [skills CLI](https://github.com/vercel-labs/skills)。
 
+`--global` 表示用户级安装；只想在当前项目使用时，在项目目录执行并省略 `--global`。其他 Agent 可分别使用 `--agent claude-code` 或 `--agent cursor`；识别与调用方式以对应 Agent 为准。
+
+检查 Codex 的全局安装结果：
+
+```bash
+npx skills list --global --agent codex
+```
+
 ## 账号、隐私与依赖
 
 - 公众号写作不需要微信凭证；本地预览与草稿上传使用安装者自己的受信任适配器。复制 [`账号适配器模板`](skills/wechat-article-flow/references/account-profile.template.md) 到私有工作区，凭证只放受保护的环境变量或私有 `.env`。
@@ -87,7 +139,7 @@ npx skills add kimplwjf/shareable-codex-skills \
 - `sms-template-review` 的机械检查不替代日期、地点、受众、政策和最终链接的权威核验。含个人信息的正文使用 `--stdin`，避免进入 shell 历史。
 - `pptx-production-suite` 是制作与交付门禁，不会自动安装 `ppt-master`、PowerPoint、浏览器或其他依赖。缺少可编辑 PPTX 作者工具时，它会在制作前说明缺口并停止。
 
-## 更新与维护
+## 更新与卸载
 
 更新全部已安装 skill：
 
@@ -98,8 +150,43 @@ npx skills update --global
 只更新一个：
 
 ```bash
-npx skills update pptx-production-suite --global
+npx skills update runhua --global
 ```
+
+更新会获取上游版本；有本地定制时先备份。各 skill 独立版本化，不要求一起升级。
+
+卸载 Codex 的全局「润滑」安装：
+
+```bash
+npx skills remove runhua --global --agent codex
+```
+
+## 常见问题
+
+**安装后没有识别到 skill？** 先用 `npx skills list --global --agent codex` 核对，再新开对话并显式输入 `$runhua` 等标识。项目级安装需在对应项目中使用。
+
+**只有中文名字能调用吗？** 「润滑」是显示名，安装与显式调用标识为 `runhua` / `$runhua`。普通对话也可以说“帮我润滑一下”，是否自动选中由 Agent 决定。
+
+**安装成功就能上传公众号或制作 PPTX 吗？** 还需要对应适配器、凭证或作者工具。Skill 会检查缺口；安装本仓库不会替你配置账号或安装这些依赖。
+
+**联网安装失败怎么办？** 检查 Node.js、Git、npm registry 和 GitHub 的可达性，按报错定位下载或克隆阶段。不要把访问令牌、Cookie 或私有配置贴到公开 Issue。
+
+**可以直接使用生成的文章、短信或图片吗？** 需要先核实事实、隐私、素材授权和目标渠道要求。短信“机械检查通过”、文章“本地预览完成”、公众号“草稿上传成功”是不同阶段，不能相互替代。
+
+## 仓库导航与贡献
+
+| 入口 | 内容 |
+| --- | --- |
+| [`skills/`](skills/) | 各 skill 的执行说明、版本及可选脚本、参考资料 |
+| [`skill-versions.json`](skill-versions.json) | 全部 skill 的当前版本清单 |
+| [`CHANGELOG.md`](CHANGELOG.md) | 版本和文档变更记录 |
+| [`AGENTS.md`](AGENTS.md) | 仓库维护、隐私、验证与发布约定 |
+| [`preview/README.md`](preview/README.md) | 能力示意图来源与使用边界 |
+| [`LICENSE`](LICENSE) | MIT 许可证 |
+
+欢迎通过 [Issues](https://github.com/kimplwjf/shareable-codex-skills/issues) 提交需求或问题，通过 [Pull requests](https://github.com/kimplwjf/shareable-codex-skills/pulls) 贡献改进。问题描述请注明 skill 名称、版本、Agent、预期行为与实际行为；复现材料使用合成或已脱敏输入。
+
+贡献前阅读维护约定。通用规则放入 skill，私人账号、品牌偏好和上传配置留在安装者工作区；不要提交真实草稿、客户数据、凭证或运行日志。
 
 每个 skill 的 `VERSION` 独立遵循语义化版本；[`skill-versions.json`](skill-versions.json) 汇总当前版本。维护者修改后至少运行：
 
